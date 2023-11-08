@@ -1,13 +1,15 @@
 package com.company;
 
 import java.io.*;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Main8{
-    private static final String PATH_TO_FILE = "src/main/resources/file.txt";
+    private static final String PATH_TO_FILE = System.getProperty("user.dir") + "/file.txt";
     public static void main(String[] args) throws Exception {
         List<Person> personList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
@@ -81,7 +83,14 @@ public class Main8{
         }
 
         public void action(List<Person> list){
-            int state = scanner.nextInt();
+            int state;
+            while (true){
+                String input = scanner.nextLine();
+                if(checkState(input) && Integer.parseInt(input) <= items.size() + 1) {
+                    state = Integer.parseInt(input);
+                    break;
+                } else System.out.println("Invalid input, try again!");
+            }
             if(state >= 1 && state < items.size() + 1){
                 try {
                     items.get(state - 1).getExec().exec(list);
@@ -91,6 +100,18 @@ public class Main8{
             }
             if (state == items.size() + 1)
                 System.exit(0);
+        }
+
+        private static boolean checkState(String state){
+            if(state.isEmpty() || state.isBlank() || state.length() > 10)
+                return false;
+            ParsePosition pos = new ParsePosition(0);
+            NumberFormat.getInstance().parse(state, pos);
+            if (!(state.length() == pos.getIndex()))
+                return false;
+            if (!(Integer.parseInt(state) >= 0 && Long.parseLong(state) <= Integer.MAX_VALUE))
+                return false;
+            return true;
         }
 
         public void addMenuItem(MenuItem menuItem){
