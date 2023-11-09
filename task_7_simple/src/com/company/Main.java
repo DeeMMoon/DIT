@@ -18,7 +18,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Input player's amount");
-            String amount = scanner.next();
+            String amount = scanner.nextLine();
             if (checkAmount(amount)){
                 return new Player(Integer.parseInt(amount));
             } else System.out.println("Invalid input \n");
@@ -29,7 +29,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Input casino's amount");
-            String amount = scanner.next();
+            String amount = scanner.nextLine();
             if (checkAmount(amount)){
                 return new Casino(Integer.parseInt(amount));
             } else System.out.println("Invalid input \n");
@@ -50,22 +50,29 @@ public class Main {
         }
     }
 
-    private static boolean checkStrategyNumber(String strategyNumber){
-        if (strategyNumber.isEmpty() || strategyNumber.isBlank()
-                || strategyNumber.length() == 0 || strategyNumber.length() > 10)
-            System.out.println("Invalid input");
+    public static boolean baseInputCheck(String num){
+        if (num.isEmpty() || num.isBlank() || num.length() > 10)
+            return false;
         ParsePosition pos = new ParsePosition(0);
-        NumberFormat.getInstance().parse(strategyNumber, pos);
-        return ((strategyNumber.length() == pos.getIndex())
-                && Integer.parseInt(strategyNumber) >= 1
-                && Integer.parseInt(strategyNumber) <= Strategy.COUNT_OF_STRATEGIES);
+        NumberFormat.getInstance().parse(num, pos);
+        if (!(num.length() == pos.getIndex()))
+            return false;
+        return true;
+    }
+
+    private static boolean checkStrategyNumber(String strategyNumber){
+        if (!baseInputCheck(strategyNumber))
+            return false;
+        if (!(Long.parseLong(strategyNumber) >= 1 && Long.parseLong(strategyNumber) <= Strategy.COUNT_OF_STRATEGIES))
+            return false;
+        return true;
     }
 
     private static boolean checkAmount(String amount){
-        if(amount.isEmpty() || amount.isBlank() || amount.length() == 0 || amount.length() > 10 || Long.parseLong(amount) > Integer.MAX_VALUE)
+        if (!baseInputCheck(amount))
             return false;
-        ParsePosition pos = new ParsePosition(0);
-        NumberFormat.getInstance().parse(amount, pos);
-        return ((amount.length() == pos.getIndex()) && Integer.parseInt(amount) >= 0);
+        if (!(Long.parseLong(amount) >= 0 && Long.parseLong(amount) <= Integer.MAX_VALUE))
+            return false;
+        return true;
     }
 }

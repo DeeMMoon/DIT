@@ -1,9 +1,9 @@
 package com.company;
 
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.company.Main.baseInputCheck;
 
 public class Roulette{
 
@@ -42,10 +42,10 @@ public class Roulette{
     }
 
     private static boolean checkBet(String bet, int amount){
-        if(bet.isEmpty() || bet.isBlank() || bet.length() == 0 || bet.length() > 10)
-            System.out.println("Invalid input \n");
-        ParsePosition pos = new ParsePosition(0);
-        NumberFormat.getInstance().parse(bet, pos);
-        return ((bet.length() == pos.getIndex()) && Integer.parseInt(bet) >= 0 && Integer.parseInt(bet) <= amount);
+        if(!baseInputCheck(bet))
+            return false;
+        if(!(Long.parseLong(bet) >= 0 && Long.parseLong(bet) <= amount))
+            return false;
+        return true;
     }
 }

@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.*;
 
+import static com.company.Main.baseInputCheck;
+
 public class Strategy {
 
     public static final Set<Integer> RED_NUMBERS = new HashSet<>();
@@ -150,12 +152,10 @@ public class Strategy {
     }
 
     private static boolean checkInputNumber(String number){
-        if(number.isEmpty() || number.isBlank() || number.length() == 0 || number.length() > 10)
-            System.out.println("Invalid input");
-        ParsePosition pos = new ParsePosition(0);
-        NumberFormat.getInstance().parse(number, pos);
-        return ((number.length() == pos.getIndex())
-                && Integer.parseInt(number) >= 0 && Integer.parseInt(number) <= 37);
+        if (!baseInputCheck(number))
+            return false;
+        if(!(Long.parseLong(number) >= 0 && Long.parseLong(number) <= 37))
+            return false;
+        return true;
     }
-
 }
