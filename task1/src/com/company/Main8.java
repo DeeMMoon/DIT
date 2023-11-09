@@ -109,7 +109,7 @@ public class Main8{
             NumberFormat.getInstance().parse(state, pos);
             if (!(state.length() == pos.getIndex()))
                 return false;
-            if (!(Integer.parseInt(state) >= 0 && Long.parseLong(state) <= Integer.MAX_VALUE))
+            if (!(Long.parseLong(state) >= 0 && Long.parseLong(state) <= Integer.MAX_VALUE))
                 return false;
             return true;
         }
