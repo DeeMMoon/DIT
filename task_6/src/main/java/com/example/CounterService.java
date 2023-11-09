@@ -19,17 +19,30 @@ public class CounterService {
         return counters.get(name);
     }
 
-    public void addCounter(Counter counter){
-        if (counter != null)
+    public boolean addCounter(Counter counter){
+        if (counter != null && !counters.containsKey(counter.getName())) {
             counters.put(counter.getName(), counter);
+            return true;
+        }
+        return false;
     }
 
-    public void deleteCounter(String name){
-        counters.remove(name);
+    public boolean deleteCounter(String name){
+        if (name != null && counters.get(name) != null) {
+            counters.remove(name);
+            return true;
+        }
+        return false;
     }
 
     public Long getSummaryCount(){
-       return counters.values().stream().mapToLong(Counter::getCounter).sum();
+        try {
+            Long result = counters.values().stream().mapToLong(Counter::getCounter).sum();
+            return result;
+        } catch (RuntimeException e){
+            e.printStackTrace();
+        }
+        return -1L;
     }
 
     public Set<String> getNames(){

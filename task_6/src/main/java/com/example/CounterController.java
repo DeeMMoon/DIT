@@ -19,10 +19,9 @@ public class CounterController {
         if(name == null || name.isEmpty() || name.isBlank())
             return ("Name can't be empty");
         Counter counter = new Counter(0, name);
-        if(counterService.getCounterByName(name) != null)
-            return ("Counter with this name already exist");
-        counterService.addCounter(counter);
-        return HttpStatus.resolve(HttpStatus.OK.value()).getReasonPhrase();
+        if(counterService.addCounter(counter))
+            return HttpStatus.resolve(HttpStatus.OK.value()).getReasonPhrase();
+        else return "Counter with this name already exist!";
     }
 
     //Инкрементация счетчика с уникальным именем
@@ -39,14 +38,19 @@ public class CounterController {
 
     // Удаление счетчика с указанным именем
     @DeleteMapping("/{name}")
-    public void deleteCounter(@PathVariable String name){
-        counterService.deleteCounter(name);
+    public String deleteCounter(@PathVariable String name){
+        if(counterService.deleteCounter(name))
+            return HttpStatus.OK.getReasonPhrase();
+        return "Counter not found";
     }
 
     // Получение суммарного значения всех счетчиков
     @GetMapping("/summary")
-    public Long getSummary() {
-        return counterService.getSummaryCount();
+    public String getSummary() {
+        Long result = counterService.getSummaryCount();
+        if (result == -1L)
+            return "Too much value...";
+        return result.toString();
     }
 
     // Получение уникальных имен счетчиков

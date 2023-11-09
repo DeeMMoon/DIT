@@ -18,7 +18,8 @@ public class Counter {
     private String name;
 
     public void inc(){
-        this.counter++;
+        if (counter != Integer.MAX_VALUE)
+            counter++;
     }
 
 }
